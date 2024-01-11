@@ -12,14 +12,20 @@ var TaskManager = /** @class */ (function () {
         this.timeElement = timeElement;
         this.tasks = [];
         this.totalTime = 0;
+        this.inputElement.addEventListener('keypress', this.handleKeyPress.bind(this));
     }
+    TaskManager.prototype.handleKeyPress = function (event) {
+        if (event.key === 'Enter') {
+            this.addTask();
+        }
+    };
     TaskManager.prototype.addTask = function () {
         var taskText = this.inputElement.value.trim();
-        var currentTime = new Date().toLocaleTimeString();
-        if (taskText) {
+        var currentTime = new Date();
+        if (taskText !== '') {
             var newTask = new Task(taskText, currentTime);
             this.tasks.push(newTask);
-            this.totalTime += 1; // Просто увеличим время выполнения на 1 минуту для каждой задачи.
+            this.totalTime += 1; // Увеличиваем время выполнения на 1 минуту для каждой задачи.
             this.renderTasks();
             this.renderTotalTime();
             this.inputElement.value = ''; // Очищаем текстовое поле
@@ -30,7 +36,7 @@ var TaskManager = /** @class */ (function () {
         this.taskListElement.innerHTML = '';
         this.tasks.forEach(function (task) {
             var li = document.createElement('li');
-            li.textContent = "".concat(task.text, " - ").concat(task.time);
+            li.textContent = "".concat(task.text, " - ").concat(task.time.toLocaleTimeString());
             _this.taskListElement.appendChild(li);
         });
     };
