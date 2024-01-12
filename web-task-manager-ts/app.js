@@ -6,8 +6,8 @@ var Task = /** @class */ (function () {
     return Task;
 }());
 var TaskManager = /** @class */ (function () {
-    function TaskManager(taskListElement, inputElement, timeElement) {
-        this.taskListElement = taskListElement;
+    function TaskManager(taskListContainer, inputElement, timeElement) {
+        this.taskListContainer = taskListContainer;
         this.inputElement = inputElement;
         this.timeElement = timeElement;
         this.tasks = [];
@@ -25,30 +25,39 @@ var TaskManager = /** @class */ (function () {
         if (taskText !== '') {
             var newTask = new Task(taskText, currentTime);
             this.tasks.push(newTask);
-            this.totalTime += 1; // Увеличиваем время выполнения на 1 минуту для каждой задачи.
+            this.totalTime += 1;
             this.renderTasks();
             this.renderTotalTime();
-            this.inputElement.value = ''; // Очищаем текстовое поле
+            this.inputElement.value = '';
         }
     };
     TaskManager.prototype.renderTasks = function () {
         var _this = this;
-        this.taskListElement.innerHTML = '';
+        this.taskListContainer.innerHTML = '';
         this.tasks.forEach(function (task) {
             var li = document.createElement('li');
-            li.textContent = "".concat(task.text, " - ").concat(task.time.toLocaleTimeString());
-            _this.taskListElement.appendChild(li);
+            li.textContent = "".concat(task.text, " - ").concat(_this.formatTime(task.time));
+            _this.taskListContainer.appendChild(li);
         });
     };
     TaskManager.prototype.renderTotalTime = function () {
-        this.timeElement.textContent = "Total Time: ".concat(this.totalTime, " minutes");
+        this.timeElement.textContent = "Total Time: ".concat(this.totalTime, " minute").concat(this.totalTime !== 1 ? 's' : '');
+    };
+    TaskManager.prototype.formatTime = function (time) {
+        try {
+            return time.toLocaleTimeString();
+        }
+        catch (error) {
+            console.error('Error formatting time:', error);
+            return '';
+        }
     };
     return TaskManager;
 }());
-var taskList = document.getElementById('task-list');
+var taskListContainer = document.getElementById('task-list');
 var taskInput = document.getElementById('task-input');
 var totalTimeElement = document.getElementById('total-time');
-var taskManager = new TaskManager(taskList, taskInput, totalTimeElement);
+var taskManager = new TaskManager(taskListContainer, taskInput, totalTimeElement);
 function addTask() {
     taskManager.addTask();
 }
