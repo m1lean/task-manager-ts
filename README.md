@@ -1,4 +1,4 @@
-# Task Manager | TypeScript
+# Task Manager | TypeScri
 
 **Description:**
 This is a simple Task Manager web application written in TypeScript. It allows users to add tasks with timestamps and displays them along with the total time spent on tasks. The design includes a clean interface with an input field, a button for adding tasks, a task list, and the total time spent.
